@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hand Gesture Controller</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <main class="app">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Webcam gesture control</p>
+          <h1>Use your hand to move a cursor and trigger actions.</h1>
+          <p class="lede">
+            Move your thumb to steer the cursor. Pinch thumb and index finger to press and hold.
+            Release the pinch to release the mouse button.
+          </p>
+        </div>
+        <div class="status-card">
+          <div class="status-row">
+            <span class="dot" id="cameraDot"></span>
+            <span id="cameraStatus">Camera idle</span>
+          </div>
+          <div class="status-row">
+            <span class="dot" id="handDot"></span>
+            <span id="handStatus">Waiting for hand</span>
+          </div>
+          <div class="hint">Pinch = hold mouse button</div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="camera-shell">
+          <video id="video" playsinline muted></video>
+          <canvas id="overlay"></canvas>
+          <div id="cursor" aria-hidden="true"></div>
+          <div id="clickFlash" aria-hidden="true"></div>
+        </div>
+
+        <aside class="panel">
+          <h2>Gesture map</h2>
+          <ul>
+            <li><strong>Thumb</strong> - move the cursor.</li>
+            <li><strong>Pinch</strong> - press and hold the left mouse button.</li>
+            <li><strong>Release</strong> - release the mouse button.</li>
+          </ul>
+
+          <div class="readout">
+            <div><span>Pointer X</span><strong id="pointerX">0</strong></div>
+            <div><span>Pointer Y</span><strong id="pointerY">0</strong></div>
+            <div><span>Pinch distance</span><strong id="pinchDistance">0</strong></div>
+            <div><span>Live gain</span><strong id="activeGain">1.70x</strong></div>
+          </div>
+
+          <label class="sensitivity-control" for="sensitivity">
+            <span>Dynamic sensitivity <strong id="sensitivityValue">1.70x base</strong></span>
+            <input id="sensitivity" type="range" min="0.8" max="2.6" value="1.7" step="0.05" />
+            <small>Moves precisely when slow, then accelerates as your thumb moves faster.</small>
+          </label>
+
+          <button id="startButton" type="button">Start camera</button>
+          <label class="mirror-control">
+            <input id="mirrorPreview" type="checkbox" />
+            Mirror camera preview
+          </label>
+          <p class="bridge-status" id="bridgeStatus">System cursor bridge: checking...</p>
+          <p class="fine-print">
+            Tip: use good lighting and keep your hand centered in the frame for the most stable tracking.
+          </p>
+        </aside>
+      </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

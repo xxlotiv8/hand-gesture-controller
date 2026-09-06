@@ -4,10 +4,13 @@
 #include <math.h>
 #include <netinet/in.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
+static bool left_button_down = false;
 
 static void post_mouse_event(const char *type, double normalized_x, double normalized_y) {
     CGRect screen = CGDisplayBounds(CGMainDisplayID());
@@ -17,10 +20,12 @@ static void post_mouse_event(const char *type, double normalized_x, double norma
 
     if (strcmp(type, "down") == 0) {
         event_type = kCGEventLeftMouseDown;
+        left_button_down = true;
     } else if (strcmp(type, "up") == 0) {
         event_type = kCGEventLeftMouseUp;
+        left_button_down = false;
     } else if (strcmp(type, "move") == 0) {
-        event_type = kCGEventMouseMoved;
+        event_type = left_button_down ? kCGEventLeftMouseDragged : kCGEventMouseMoved;
     } else {
         return;
     }
